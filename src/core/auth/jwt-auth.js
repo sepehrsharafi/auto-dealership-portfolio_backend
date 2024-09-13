@@ -15,4 +15,3 @@ function jwtValidate(jwtToken) {
 }
 
 export { jwtSign, jwtValidate };
-// test 2
