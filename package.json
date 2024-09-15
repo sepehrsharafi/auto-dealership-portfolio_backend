@@ -6,7 +6,8 @@
   "type": "module",
   "scripts": {
     "start": "node ./src/app.js",
-    "dev": "nodemon ./src/app.js"
+    "dev": "nodemon ./src/app.js",
+    "test": "nodemon ./src/test.js"
   },
   "author": "",
   "license": "ISC",

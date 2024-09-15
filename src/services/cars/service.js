@@ -1,30 +1,37 @@
 import {
-  getTaskById,
-  createTask,
-  deleteTaskById,
-  deleteAllTasks,
-  updateTaskById,
-  updateAllTasks,
-  getTasksByUserId,
-} from "../../models/tasks/index.js";
+  getCarsByAdminId,
+  getCarById,
+  createCar,
+  deleteCarById,
+  updateCarById,
+  getAllCars,
+} from "../../models/cars/index.js";
 
-async function getTaskByIdService(id, userId) {
-  const task = await getTaskById(id, userId);
-  if (!task || task.length <= 0) {
+export async function getCarsByAdminIdService(adminId) {
+  const cars = await getCarsByAdminId(adminId);
+  if (cars.length <= 0 || cars === null || cars === undefined) {
     return null;
   }
-  return task[0];
+  return cars;
 }
-async function getAllTasksByUserIdService(userId) {
-  const tasks = await getTasksByUserId(userId);
-  if (tasks.length <= 0 || tasks === null || tasks === undefined) {
+export async function getAllCarsService() {
+  const cars = await getAllCars();
+  if (cars.length <= 0 || cars === null || cars === undefined) {
     return null;
   }
-  return tasks;
+  return cars;
 }
 
-async function createTaskService(userId, title, description, taskdate) {
-  const createResult = await createTask(userId, title, description, taskdate);
+export async function getCarByIdService(id) {
+  const cars = await getCarById(id);
+  if (!cars || cars.length <= 0) {
+    return null;
+  }
+  return cars[0];
+}
+
+export async function createCarService(carDataObj) {
+  const createResult = await createCar(carDataObj);
   if (
     createResult["rowCount"] <= 0 ||
     createResult === undefined ||
@@ -34,8 +41,8 @@ async function createTaskService(userId, title, description, taskdate) {
   }
   return createResult;
 }
-async function deleteTaskByIdService(id, userId) {
-  const deleteResult = await deleteTaskById(id, userId);
+export async function deleteCarByIdService(id) {
+  const deleteResult = await deleteCarById(id);
   if (
     deleteResult["rowCount"] <= 0 ||
     deleteResult === undefined ||
@@ -45,19 +52,9 @@ async function deleteTaskByIdService(id, userId) {
   }
   return deleteResult;
 }
-async function deleteAllTasksService(userId) {
-  const deleteResult = await deleteAllTasks(userId);
-  if (
-    deleteResult["rowCount"] <= 0 ||
-    deleteResult === undefined ||
-    deleteResult === null
-  ) {
-    return null;
-  }
-  return deleteResult;
-}
-async function updateTaskByIdService(userId, id, column, value) {
-  const updateResult = await updateTaskById(userId, id, column, value);
+
+export async function updateCarByIdService(id, column, value) {
+  const updateResult = await updateCarById(id, column, value);
   if (
     updateResult["rowCount"] <= 0 ||
     updateResult === undefined ||
@@ -67,23 +64,3 @@ async function updateTaskByIdService(userId, id, column, value) {
   }
   return updateResult;
 }
-async function updateAllTasksService(userId, column, value) {
-  const updateResult = await updateAllTasks(userId, column, value);
-  if (
-    updateResult["rowCount"] <= 0 ||
-    updateResult === undefined ||
-    updateResult === null
-  ) {
-    return null;
-  }
-  return updateResult;
-}
-export {
-  getTaskByIdService,
-  createTaskService,
-  deleteTaskByIdService,
-  deleteAllTasksService,
-  updateTaskByIdService,
-  updateAllTasksService,
-  getAllTasksByUserIdService,
-};

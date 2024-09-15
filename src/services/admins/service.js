@@ -15,6 +15,7 @@ async function getAdminByIdService(id) {
 }
 async function createAdminService(userName, password, role) {
   const encryptedPassword = await hash(password);
+
   const createResult = await createAdmin(userName, encryptedPassword, role);
   if (
     createResult["rowCount"] <= 0 ||

@@ -15,6 +15,7 @@ const createAdminValidator = async (req, res, next) => {
     });
     const validatedBody = await bodySchema.validateAsync(req.body);
     req.validatedBody = validatedBody;
+
     next();
   } catch (err) {
     res.status(400).json({ message: err.message });

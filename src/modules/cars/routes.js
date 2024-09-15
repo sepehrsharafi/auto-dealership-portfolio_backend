@@ -1,41 +1,30 @@
 import express from "express";
 
 import {
-  getTaskByIdController,
-  createTaskController,
-  getAllTasksByUserIDController,
-  deleteTaskByIdController,
-  deleteAllTasksController,
-  updateTaskByIdController,
-  updateAllTasksAsCompletedController,
-} from "./controllers.js";
-import {
-  getTaskByIdValidaitor,
-  createTaskValidator,
-  deleteTaskByIdValidator,
-  updateTaskByIdValidator,
+  getCarByIdValidaitor,
+  createCarValidator,
+  deleteCarByIdValidator,
+  updateCarByIdValidator,
 } from "./validations.js";
+import {
+  getCarsByAdminIdController,
+  getCarByIdController,
+  createCarController,
+  deleteCarByIdController,
+  updateCarByIdController,
+  getAllCarsController,
+} from "./controllers.js";
 const router = express.Router();
 
-//get all tasks by user id
-router.get("", getAllTasksByUserIDController);
+router.get("", getAllCarsController);
+router.get("/admin/:id", getCarsByAdminIdController);
 
-//task by id
-router.get("/:id", getTaskByIdValidaitor, getTaskByIdController);
+router.get("/:id", getCarByIdValidaitor, getCarByIdController);
 
-//create task
-router.post("", createTaskValidator, createTaskController);
+router.post("", createCarValidator, createCarController);
 
-//delete task by id
-router.delete("/:id", deleteTaskByIdValidator, deleteTaskByIdController);
+router.delete("/:id", deleteCarByIdValidator, deleteCarByIdController);
 
-//delete all tasks
-router.delete("", deleteAllTasksController);
-
-//update task by id
-router.put("/:id", updateTaskByIdValidator, updateTaskByIdController);
-
-//update all tasks as complated
-router.put("", updateAllTasksAsCompletedController);
+router.put("/:id", updateCarByIdValidator, updateCarByIdController);
 
 export { router };

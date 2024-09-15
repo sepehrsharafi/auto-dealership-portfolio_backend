@@ -14,7 +14,7 @@ const authValidationMiddleware = (req, res, next) => {
     }
 
     const tokenData = jwtValidate(jwtToken);
-    req.user = tokenData;
+    req.admin = tokenData;
     next();
   } catch (error) {
     res.status(401).json({ message: error.message });

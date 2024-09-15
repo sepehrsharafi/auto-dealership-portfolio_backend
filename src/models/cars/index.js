@@ -1,74 +1,60 @@
 import { query } from "../../core/database/postgres-service.js";
 import format from "pg-format";
 const SCHEMA = "public";
-const NAME = "tasks";
+const NAME = "cars";
 
-export async function getTasksByUserId(userId) {
+export async function getCarsByAdminId(adminId) {
   let sqlQuery, sqlVariables;
 
-  sqlQuery = `SELECT * FROM ${SCHEMA}.${NAME} WHERE user_id = $1`;
-  sqlVariables = [userId];
+  sqlQuery = `SELECT * FROM ${SCHEMA}.${NAME} WHERE admin _id = $1`;
+  sqlVariables = [adminId];
+  return (await query(sqlQuery, sqlVariables)).rows;
+}
+export async function getAllCars() {
+  let sqlQuery, sqlVariables;
+
+  sqlQuery = `SELECT * FROM ${SCHEMA}.${NAME} `;
+  sqlVariables = [];
   return (await query(sqlQuery, sqlVariables)).rows;
 }
 
-export async function getTaskById(id, userId) {
+export async function getCarById(id) {
   let sqlQuery, sqlVariables;
 
   sqlQuery = `SELECT * FROM ${SCHEMA}.${NAME}
-      WHERE id = $1 and user_id = $2`;
-  sqlVariables = [id, userId];
+      WHERE id = $1 `;
+  sqlVariables = [id];
 
   return (await query(sqlQuery, sqlVariables)).rows;
 }
 
-export async function createTask(userId, title, description, taskdate) {
-  const sqlQuery = `INSERT INTO ${SCHEMA}.${NAME} (user_id ,title, description , taskdate , is_completed)
+export async function createCar(carDataObj) {
+  const keys = Object.keys(carDataObj);
+  const values = Object.values(carDataObj);
+
+  const sqlQuery = `INSERT INTO ${SCHEMA}.${NAME} (${keys.join(", ")})
     VALUES
-      ( $1 , $2 , $3 , $4 , false );`;
+      (${keys.map((_, i) => `$${i + 1}`).join(", ")});`;
 
-  const sqlVariables = [userId, title, description, taskdate];
-  return query(sqlQuery, sqlVariables);
+  return query(sqlQuery, values);
 }
 
-export async function deleteAllTasks(userId) {
-  let sqlQuery, sqlVariables;
-
-  sqlQuery = `DELETE FROM ${SCHEMA}.${NAME} WHERE user_id = $1`;
-  sqlVariables = [userId];
-
-  return query(sqlQuery, sqlVariables);
-}
-
-export async function deleteTaskById(id, userId) {
+export async function deleteCarById(id) {
   const sqlQuery = `DELETE FROM ${SCHEMA}.${NAME}
-    WHERE id = $1 and user_id = $2;`;
+    WHERE id = $1 ;`;
 
-  const sqlVariables = [id, userId];
+  const sqlVariables = [id];
   return query(sqlQuery, sqlVariables);
 }
 
-//i used pg-format here to
-//reformat the query cuz i couldnt use quots of string variable for column name
-export async function updateTaskById(userId, id, column, value) {
+export async function updateCarById(id, column, value) {
   const sqlQuery = format(
-    `UPDATE %I.%I SET %I = $1 WHERE id = $2 and user_id = $3;`,
+    `UPDATE %I.%I SET %I = $1 WHERE id = $2 ;`,
     SCHEMA,
     NAME,
     column
   );
-  const sqlVariables = [value, id, userId];
-
-  return query(sqlQuery, sqlVariables);
-}
-
-export async function updateAllTasks(userId, column, value) {
-  const sqlQuery = format(
-    `UPDATE %I.%I SET %I = $1 WHERE user_id = $2`,
-    SCHEMA,
-    NAME,
-    column
-  );
-  const sqlVariables = [value, userId];
+  const sqlVariables = [value, id];
 
   return query(sqlQuery, sqlVariables);
 }

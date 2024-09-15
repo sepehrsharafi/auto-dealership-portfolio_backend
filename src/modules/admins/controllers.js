@@ -26,6 +26,7 @@ const getAdminByIdController = async (req, res, next) => {
 const createAdminController = async (req, res) => {
   try {
     const { username, password, role } = req.validatedBody;
+
     const createResult = await createAdminService(username, password, role);
     if (createResult === null) {
       res.status(424).json({

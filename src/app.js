@@ -1,5 +1,5 @@
 import express from "express";
-import { router as tasksRouter } from "./modules/tasks/routes.js";
+import { router as carsRouter } from "./modules/cars/routes.js";
 import { router as adminRouter } from "./modules/admins/routes.js";
 import { EXPRESS_APP } from "./core/config/index.js";
 import { apiLogger, routeNotFound } from "./core/middleware/middlewares.js";
@@ -17,10 +17,10 @@ app.use(
 app.use(express.json());
 app.use(apiLogger);
 
-app.use("/api/tasks", authValidationMiddleware, tasksRouter);
+app.use("/api/cars", carsRouter);
 app.use("/api", adminRouter);
 app.use(routeNotFound);
 const port = EXPRESS_APP.port;
 app.listen(port, () => {
-  console.log(`todo app runing on port ${port}`);
+  console.log(`dealership app runing on port ${port}`);
 });
