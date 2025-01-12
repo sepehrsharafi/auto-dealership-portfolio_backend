@@ -13,13 +13,16 @@ import {
   deleteCarByIdController,
   updateCarByIdController,
   getAllCarsController,
+  getSliderController,
 } from "./controllers.js";
+
 const router = express.Router();
 
-router.get("", getAllCarsController);
 router.get("/admin/:id", getCarsByAdminIdController);
 
-router.get("/:id", getCarByIdValidaitor, getCarByIdController);
+router.get("", getAllCarsController);
+router.get("/slider", getSliderController);
+router.get("/:car_id", getCarByIdValidaitor, getCarByIdController);
 
 router.post("", createCarValidator, createCarController);
 

@@ -1,7 +1,7 @@
 import { query } from "../../core/database/postgres-service.js";
 import format from "pg-format";
 const SCHEMA = "public";
-const NAME = "cars";
+const NAME = "car_ads";
 
 export async function getCarsByAdminId(adminId) {
   let sqlQuery, sqlVariables;
@@ -13,17 +13,30 @@ export async function getCarsByAdminId(adminId) {
 export async function getAllCars() {
   let sqlQuery, sqlVariables;
 
-  sqlQuery = `SELECT * FROM ${SCHEMA}.${NAME} `;
+  sqlQuery = `select car_id , publish_date ,image_urls , brand , model , trim , mileage , year_manufactured , body_condition , short_description , type , payment_type , active from ${NAME}
+      WHERE active = true
+    `;
   sqlVariables = [];
   return (await query(sqlQuery, sqlVariables)).rows;
 }
 
-export async function getCarById(id) {
+export async function getSlider() {
   let sqlQuery, sqlVariables;
 
-  sqlQuery = `SELECT * FROM ${SCHEMA}.${NAME}
-      WHERE id = $1 `;
-  sqlVariables = [id];
+  sqlQuery = ` SELECT car_id, publish_date, image_urls, brand, model, trim, mileage, payment_type, active
+               FROM ${NAME}
+               WHERE active = true
+               ORDER BY publish_date DESC
+               LIMIT 8; `;
+  sqlVariables = [];
+  return (await query(sqlQuery, sqlVariables)).rows;
+}
+
+export async function getCarById(car_id) {
+  let sqlQuery, sqlVariables;
+
+  sqlQuery = `SELECT * FROM ${NAME} WHERE car_id = $1;`;
+  sqlVariables = [car_id];
 
   return (await query(sqlQuery, sqlVariables)).rows;
 }

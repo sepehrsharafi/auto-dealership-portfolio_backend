@@ -1,8 +1,9 @@
 import Joi from "joi";
 export const getCarByIdValidaitor = async (req, res, next) => {
+  console.log(req.params);
   try {
     const paramsSchema = Joi.object({
-      id: Joi.number().required(),
+      car_id: Joi.required(),
     }).required();
 
     const validationParams = await paramsSchema.validateAsync(req.params);

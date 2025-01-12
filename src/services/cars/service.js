@@ -5,6 +5,7 @@ import {
   deleteCarById,
   updateCarById,
   getAllCars,
+  getSlider,
 } from "../../models/cars/index.js";
 
 export async function getCarsByAdminIdService(adminId) {
@@ -16,6 +17,14 @@ export async function getCarsByAdminIdService(adminId) {
 }
 export async function getAllCarsService() {
   const cars = await getAllCars();
+  if (cars.length <= 0 || cars === null || cars === undefined) {
+    return null;
+  }
+  return cars;
+}
+
+export async function getSliderService() {
+  const cars = await getSlider();
   if (cars.length <= 0 || cars === null || cars === undefined) {
     return null;
   }

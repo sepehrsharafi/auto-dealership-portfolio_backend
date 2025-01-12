@@ -5,6 +5,7 @@ import {
   deleteCarByIdService,
   updateCarByIdService,
   getAllCarsService,
+  getSliderService,
 } from "../../services/cars/service.js";
 
 export const getCarsByAdminIdController = async (req, res) => {
@@ -44,9 +45,25 @@ export const getAllCarsController = async (req, res) => {
   }
 };
 
+export const getSliderController = async (req, res) => {
+  try {
+    const data = await getSliderService();
+    if (data === null) {
+      res
+        .status(404)
+        .json({ message: `there is no car to show or an error happend` });
+    } else {
+      res.status(200).json(data);
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: error.message });
+  }
+};
+
 export const getCarByIdController = async (req, res, next) => {
   try {
-    const carId = req.validatedParams.id;
+    const carId = req.validatedParams.car_id;
     const car = await getCarByIdService(carId);
     if (car === null) {
       res.status(404).json({
