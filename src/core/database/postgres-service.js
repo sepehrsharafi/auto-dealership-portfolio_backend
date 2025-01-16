@@ -7,11 +7,8 @@ export async function query(query, variables) {
   const client = await pool.connect();
   try {
     const res = await client.query(query, variables);
-    return { data: res.rows, error: null }; // Return data and no error
-  } catch (error) {
-    console.error("Database query error:", error);
-    return { data: null, error: error.message }; // Return no data and an error message
+    return res;
   } finally {
-    client.release(); // Always release the client back to the pool
+    client.release();
   }
 }
