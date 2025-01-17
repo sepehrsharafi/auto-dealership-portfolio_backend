@@ -15,6 +15,7 @@ import {
   getAllCarsController,
   getSliderController,
 } from "./controllers.js";
+import { uploadImages } from "../../multer/multer.js";
 
 const router = express.Router();
 
@@ -24,7 +25,7 @@ router.get("", getAllCarsController);
 router.get("/slider", getSliderController);
 router.get("/:car_id", getCarByIdValidaitor, getCarByIdController);
 
-router.post("", createCarValidator, createCarController);
+router.post("", uploadImages, createCarValidator, createCarController);
 
 router.delete("/:id", deleteCarByIdValidator, deleteCarByIdController);
 
