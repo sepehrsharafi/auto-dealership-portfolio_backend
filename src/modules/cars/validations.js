@@ -19,7 +19,6 @@ export const createCarValidator = async (req, res, next) => {
   try {
     const bodySchema = Joi.object({
       admin_id: Joi.number().integer().required(), // Foreign key admin ID
-      car_id: Joi.string().required().trim().max(255), // Car-specific ID (required, max length 255)
       publish_date: Joi.date().optional(), // Publish date (required, ISO format)
       active: Joi.boolean().default(true), // Active status (boolean, default true)
       brand: Joi.string().required().trim().max(255), // Brand (required, max length 255)
