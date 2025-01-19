@@ -14,12 +14,14 @@ import {
   updateCarByIdController,
   getAllCarsController,
   getSliderController,
+  getAllCarsDashboardController,
 } from "./controllers.js";
 
 const router = express.Router();
 
 router.get("/admin/:id", getCarsByAdminIdController);
 
+router.get("/dashboard", getAllCarsDashboardController);
 router.get("", getAllCarsController);
 router.get("/slider", getSliderController);
 router.get("/:car_id", getCarByIdValidaitor, getCarByIdController);
