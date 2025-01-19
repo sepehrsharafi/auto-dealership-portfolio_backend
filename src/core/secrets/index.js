@@ -12,8 +12,13 @@ const PG_SECRETS = {
   ssl: parsedUrl.searchParams.get("sslmode") === "require",
 };
 
+const SDKSECRETS = {
+  sdkKey: process.env.S3ACCESSKEY,
+  sdkSecret: process.env.SECRETACCESSKEEY,
+  storageName: process.env.STORAGE_NAME,
+};
 const JWT_SECRETS = {
   signKey: process.env.SIGN_KEY,
 };
 
-export { PG_SECRETS, JWT_SECRETS };
+export { PG_SECRETS, JWT_SECRETS, SDKSECRETS };

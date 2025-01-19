@@ -18,27 +18,25 @@ export const getCarByIdValidaitor = async (req, res, next) => {
 export const createCarValidator = async (req, res, next) => {
   try {
     const bodySchema = Joi.object({
-      admin_id: Joi.number().integer().required(), // foreign key admin ID
-      title: Joi.string().required().trim().max(255), // title (max length 255)
-      brand: Joi.string().required().trim().max(255), // brand (max length 255)
-      model: Joi.string().required().trim().max(255), // model (max length 255)
-      price: Joi.number().integer().min(0).required(), // price (non-negative)
-      year: Joi.number().integer().min(1886).required(), // year (must be >= 1886)
-      VIN_number: Joi.string().trim().max(50), // VIN_number (max length 50)
-      mileage: Joi.number().integer().min(0).optional(), // mileage (non-negative)
-      Body_type: Joi.string().trim().max(100), // body type (max length 100)
-      Transmission: Joi.string().trim().max(100), // transmission type (max length 100)
-      cylinder_count: Joi.number().integer().optional(), // cylinder count (optional)
-      Fuel_type: Joi.string().trim().max(100), // fuel type (max length 100)
-      Exterior_color: Joi.string().trim().max(50), // exterior color (max length 50)
-      Interior_color: Joi.string().trim().max(50), // interior color (max length 50)
-      chassis_condition: Joi.string().trim().max(255), // chassis condition (max length 255)
-      body_condition: Joi.string().trim().max(255), // body condition (max length 255)
-      published_at: Joi.date().optional(), // published date (optional)
-      Specifications: Joi.string().allow("").optional(), // specifications (text, optional)
-      description: Joi.string().allow("").optional(), // description (text, optional)
-      picture: Joi.string().uri().optional(), // picture (optional, valid URL)
-      active: Joi.boolean().default(true), // active status (boolean, default true)
+      admin_id: Joi.number().integer().required(), // Foreign key admin ID
+      publish_date: Joi.date().optional(), // Publish date (required, ISO format)
+      active: Joi.boolean().default(true), // Active status (boolean, default true)
+      brand: Joi.string().required().trim().max(255), // Brand (required, max length 255)
+      model: Joi.string().required().trim().max(255), // Model (required, max length 255)
+      trim: Joi.string().trim().max(255).optional(), // Trim (optional, max length 255)
+      mileage: Joi.number().integer().min(0).optional(), // Mileage (optional, non-negative)
+      year_manufactured: Joi.number().integer().min(1886).required(), // Year manufactured (required, >= 1886)
+      body_condition: Joi.string().trim().max(255).optional(), // Body condition (optional, max length 255)
+      short_description: Joi.string().trim().optional(), // Short description (optional)
+      type: Joi.string().trim().max(255).optional(), // Type (optional, max length 255)
+      payment_type: Joi.string().optional(), // Payment type (optional, JSONB)
+      tags: Joi.array().items(Joi.string()).optional(), // Tags (optional, array of strings)
+      gearbox: Joi.string().trim().max(255).optional(), // Gearbox (optional, max length 255)
+      chassis_condition: Joi.string().trim().max(255).optional(), // Chassis condition (optional, max length 255)
+      engine_condition: Joi.string().trim().max(255).optional(), // Engine condition (optional, max length 255)
+      exterior_color: Joi.string().trim().max(255).optional(), // Exterior color (optional, max length 255)
+      interior_color: Joi.string().trim().max(255).optional(), // Interior color (optional, max length 255)
+      full_description: Joi.string().trim().optional(), // Full description (optional)
     }).required();
 
     const validationBody = await bodySchema.validateAsync(req.body);
@@ -49,7 +47,6 @@ export const createCarValidator = async (req, res, next) => {
     res.status(400).json({ message: err.message });
   }
 };
-
 export const deleteCarByIdValidator = async (req, res, next) => {
   try {
     const paramsSchema = Joi.object({
@@ -90,7 +87,6 @@ export const updateCarByIdValidator = async (req, res, next) => {
       published_at: Joi.date().optional(), // optional published_at date
       specifications: Joi.string().allow("").optional(), // optional specifications text, can be empty
       description: Joi.string().allow("").optional(), // optional description, can be empty
-      picture: Joi.string().uri().optional(), // optional picture, must be a valid URI
       active: Joi.boolean().optional(), // optional active status
     }).min(1);
 
