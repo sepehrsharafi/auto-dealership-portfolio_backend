@@ -6,6 +6,7 @@ import {
   updateCarByIdService,
   getAllCarsService,
   getSliderService,
+  getAllCarsDashboardService,
 } from "../../services/cars/service.js";
 import uploadFileToS3 from "../../SDKconf/sdk.js";
 export const getCarsByAdminIdController = async (req, res) => {
@@ -30,6 +31,24 @@ export const getCarsByAdminIdController = async (req, res) => {
 export const getAllCarsController = async (req, res) => {
   try {
     const data = await getAllCarsService();
+    if (data === null) {
+      res
+        .status(404)
+        .json({ message: "there is no car to show or an error happend" });
+    } else {
+      res.status(200).json(data);
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      message: error.message,
+    });
+  }
+};
+
+export const getAllCarsDashboardController = async (req, res) => {
+  try {
+    const data = await getAllCarsDashboardService();
     if (data === null) {
       res
         .status(404)

@@ -10,11 +10,21 @@ export async function getCarsByAdminId(adminId) {
   sqlVariables = [adminId];
   return (await query(sqlQuery, sqlVariables)).rows;
 }
+
 export async function getAllCars() {
   let sqlQuery, sqlVariables;
 
   sqlQuery = `select car_id , publish_date ,image_urls , brand , model , trim , mileage , year_manufactured , body_condition , short_description , type , payment_type , active from ${NAME}
       WHERE active = true
+    `;
+  sqlVariables = [];
+  return (await query(sqlQuery, sqlVariables)).rows;
+}
+
+export async function getAllCarsDashboard() {
+  let sqlQuery, sqlVariables;
+
+  sqlQuery = `select car_id , publish_date ,image_urls , brand , model , trim , mileage , year_manufactured , body_condition , short_description , type , payment_type , active from ${NAME}
     `;
   sqlVariables = [];
   return (await query(sqlQuery, sqlVariables)).rows;
@@ -28,6 +38,7 @@ export async function getSlider() {
                WHERE active = true
                ORDER BY publish_date DESC
                LIMIT 8; `;
+
   sqlVariables = [];
   return (await query(sqlQuery, sqlVariables)).rows;
 }
