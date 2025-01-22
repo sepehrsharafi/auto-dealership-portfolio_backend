@@ -139,6 +139,7 @@ export const createCarController = async (req, res) => {
     }
 
     carDataObj.image_urls = validImageUrls;
+    console.log(carDataObj.images_sorted);
 
     const createResult = await createCarService(carDataObj);
 
