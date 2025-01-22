@@ -16,10 +16,10 @@ const s3Client = new S3Client({
   forcePathStyle: true,
 });
 
-const uploadFileToS3 = async (file, carID, index) => {
+const uploadFileToS3 = async (file, carID) => {
   const params = {
     Bucket: SDKSECRETS.storageName,
-    Key: `uploads/${carID}/${index + 1}.${file.mimetype.split("/")[1]}`,
+    Key: `uploads/${carID}/${file.originalname}.${file.mimetype.split("/")[1]}`,
     Body: file.buffer,
     ACL: "public-read",
   };

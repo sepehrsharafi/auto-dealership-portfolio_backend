@@ -36,6 +36,7 @@ export const createCarValidator = async (req, res, next) => {
       exterior_color: Joi.string().trim().max(255).optional(), // Exterior color (optional, max length 255)
       interior_color: Joi.string().trim().max(255).optional(), // Interior color (optional, max length 255)
       full_description: Joi.string().trim().optional(), // Full description (optional)
+      images_sorted: Joi.array().items(Joi.string()).optional(), // Array of image URLs sorted
     }).required();
 
     const validationBody = await bodySchema.validateAsync(req.body);
@@ -72,6 +73,7 @@ export const updateCarByIdValidator = async (req, res, next) => {
       exterior_color: Joi.string().trim().max(255).optional(), // Exterior color (optional, max length 255)
       interior_color: Joi.string().trim().max(255).optional(), // Interior color (optional, max length 255)
       full_description: Joi.string().trim().optional(), // Full description (optional)
+      images_sorted: Joi.array().items(Joi.string()).optional(), // Array of image URLs sorted
     }).required();
 
     // Validate the params and body

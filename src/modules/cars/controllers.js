@@ -120,7 +120,7 @@ export const createCarController = async (req, res) => {
     const imageUrls = await Promise.all(
       uploadedFiles.map(async (file, index) => {
         try {
-          const url = await uploadFileToS3(file, carID, index); // Pass carID to the upload function
+          const url = await uploadFileToS3(file, carID); // Pass carID to the upload function
           console.log(url);
 
           return url;
