@@ -1,3 +1,5 @@
+import sharp from "sharp";
+
 const compressImage = async (file) => {
   try {
     const originalSizeInBytes = file.buffer.length;
