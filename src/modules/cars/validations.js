@@ -63,7 +63,7 @@ export const updateCarByIdValidator = async (req, res, next) => {
       req.body.images_sorted = [req.body.images_sorted];
     }
     const paramsSchema = Joi.object({
-      car_id: Joi.string().required(), // car ID must be a positive integer
+      car_id: Joi.string().required(),
     });
 
     const bodySchema = Joi.object({
@@ -107,7 +107,7 @@ export const updateCarByIdValidator = async (req, res, next) => {
 export const deleteCarByIdValidator = async (req, res, next) => {
   try {
     const paramsSchema = Joi.object({
-      car_id: Joi.string().required(), // car ID must be a positive integer
+      car_id: Joi.string().required(),
     });
 
     const validatedParams = await paramsSchema.validateAsync(req.params);

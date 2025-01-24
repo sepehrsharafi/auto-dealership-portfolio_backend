@@ -65,7 +65,7 @@ export async function createCar(carDataObj) {
 
 export async function deleteCarById(id) {
   const sqlQuery = `DELETE FROM ${SCHEMA}.${NAME}
-    WHERE id = $1 ;`;
+    WHERE car_id = $1 ;`;
 
   const sqlVariables = [id];
   return query(sqlQuery, sqlVariables);
