@@ -27,4 +27,4 @@ const upload = multer({
 });
 
 //max 10 images
-export const uploadImages = upload.array("pictures", 10);
+export const uploadImages = upload.array("pictures", 30);
