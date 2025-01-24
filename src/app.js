@@ -15,10 +15,10 @@ const app = express();
 
 app.use(
   cors({
-    origin: "*", // Allow requests from this origin
-    methods: ["GET", "POST", "PUT", "DELETE"], // Allowed HTTP methods
-    allowedHeaders: ["Content-Type", "Authorization"], // Allowed headers
-    credentials: true, // Allow credentials (cookies, authorization headers)
+    origin: "*",
+    methods: ["GET", "POST", "PUT", "DELETE"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true,
   })
 );
 

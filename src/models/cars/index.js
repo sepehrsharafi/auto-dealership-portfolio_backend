@@ -73,7 +73,7 @@ export async function deleteCarById(id) {
 
 export async function updateCarById(id, column, value) {
   const sqlQuery = format(
-    `UPDATE %I.%I SET %I = $1 WHERE id = $2 ;`,
+    `UPDATE %I.%I SET %I = $1 WHERE car_id = $2 ;`,
     SCHEMA,
     NAME,
     column

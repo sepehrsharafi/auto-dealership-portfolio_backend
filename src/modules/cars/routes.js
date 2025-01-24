@@ -31,6 +31,11 @@ router.post("", uploadImages, createCarValidator, createCarController);
 
 router.delete("/:id", deleteCarByIdValidator, deleteCarByIdController);
 
-router.put("/:id", updateCarByIdValidator, updateCarByIdController);
+router.put(
+  "/:car_id",
+  uploadImages,
+  updateCarByIdValidator,
+  updateCarByIdController
+);
 
 export { router };
