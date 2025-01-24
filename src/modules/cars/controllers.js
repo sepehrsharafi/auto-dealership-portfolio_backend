@@ -114,13 +114,19 @@ export const createCarController = async (req, res) => {
       return res.status(400).json({ message: "No images uploaded" });
     }
 
+    // Replace spaces and slashes in brand and model with '0'
+    const sanitizeString = (str) => str.replace(/[ /]/g, "0");
+
     // car_id
-    const brand = carDataObj.brand.toUpperCase().substring(0, 3);
-    const model = carDataObj.model.toUpperCase().substring(0, 3);
-    const trim = carDataObj.trim.toUpperCase().substring(0, 3);
+    const brand = sanitizeString(
+      carDataObj.brand.toUpperCase().substring(0, 3)
+    );
+    const model = sanitizeString(
+      carDataObj.model.toUpperCase().substring(0, 3)
+    );
     const randomNumber = Math.floor(Math.random() * (9999 - 1000 + 1)) + 1000;
 
-    const carID = `${brand}${model}${trim}${randomNumber}`;
+    const carID = `${brand}${model}${randomNumber}`;
     carDataObj.car_id = carID;
 
     const compressedFiles = await Promise.all(
