@@ -8,7 +8,13 @@ import {
   getSliderService,
   getAllCarsDashboardService,
 } from "../../services/cars/service.js";
-import { uploadFileToS3, deleteFilesInDirectory } from "../../SDKconf/sdk.js";
+import {
+  uploadFileToS3,
+  deleteFilesInDirectory,
+  deleteFolderByCarID,
+} from "../../SDKconf/sdk.js";
+import sharp from "sharp";
+import compressImage from "../../core/utils/compressing/compressImage.js";
 export const getCarsByAdminIdController = async (req, res) => {
   try {
     const adminId = req.admin.id;
@@ -98,6 +104,7 @@ export const getCarByIdController = async (req, res, next) => {
     });
   }
 };
+
 export const createCarController = async (req, res) => {
   try {
     const carDataObj = req.validatedBody;
@@ -107,7 +114,7 @@ export const createCarController = async (req, res) => {
       return res.status(400).json({ message: "No images uploaded" });
     }
 
-    // Generate a unique car_id
+    // car_id
     const brand = carDataObj.brand.toUpperCase().substring(0, 3);
     const model = carDataObj.model.toUpperCase().substring(0, 3);
     const trim = carDataObj.trim.toUpperCase().substring(0, 3);
@@ -116,9 +123,28 @@ export const createCarController = async (req, res) => {
     const carID = `${brand}${model}${trim}${randomNumber}`;
     carDataObj.car_id = carID;
 
-    // Upload files to S3 and get their URLs
+    const compressedFiles = await Promise.all(
+      uploadedFiles.map(async (file) => {
+        try {
+          return await compressImage(file);
+        } catch (error) {
+          console.error(`Failed to compress file: ${file.originalname}`, error);
+          return null;
+        }
+      })
+    );
+
+    const validCompressedFiles = compressedFiles.filter(
+      (file) => file !== null
+    );
+
+    if (validCompressedFiles.length === 0) {
+      return res.status(400).json({ message: "Failed to compress any images" });
+    }
+
+    // Upload compressed files to S3 and get their URLs
     const imageUrls = await Promise.all(
-      uploadedFiles.map(async (file, index) => {
+      validCompressedFiles.map(async (file, index) => {
         try {
           const url = await uploadFileToS3(file, carID); // Pass carID to the upload function
           console.log(url);
@@ -168,6 +194,7 @@ export const updateCarByIdController = async (req, res) => {
     const uploadedFiles = req.files;
     const carId = req.validatedParams.car_id;
     const prevImageUrls = updateList.image_urls;
+
     if (!uploadedFiles || uploadedFiles.length === 0) {
       console.log("no new images uploaded");
     }
@@ -175,9 +202,27 @@ export const updateCarByIdController = async (req, res) => {
     const columns = Object.keys(updateList);
     let allUpdatesSuccessful = true;
 
-    // Upload files to S3 and get their URLs
+    const compressedFiles = await Promise.all(
+      uploadedFiles.map(async (file) => {
+        try {
+          return await compressImage(file);
+        } catch (error) {
+          console.error(`Failed to compress file: ${file.originalname}`, error);
+          return null;
+        }
+      })
+    );
+
+    const validCompressedFiles = compressedFiles.filter(
+      (file) => file !== null
+    );
+
+    if (validCompressedFiles.length === 0) {
+      return res.status(400).json({ message: "Failed to compress any images" });
+    }
+
     const imageUrls = await Promise.all(
-      uploadedFiles.map(async (file, index) => {
+      validCompressedFiles.map(async (file, index) => {
         try {
           await deleteFilesInDirectory(carId, prevImageUrls);
           const url = await uploadFileToS3(file, carId, index);
@@ -234,14 +279,26 @@ export const updateCarByIdController = async (req, res) => {
 export const deleteCarByIdController = async (req, res) => {
   try {
     const carId = req.validatedParams.car_id;
+
     const deleteResult = await deleteCarByIdService(carId);
+
     if (deleteResult === null) {
       res.status(424).json({
-        message: `car with id=${carId} not deleted!!`,
+        message: `Car with id=${carId} not deleted!`,
       });
     } else {
+      try {
+        await deleteFolderByCarID(carId);
+        console.log(`Folder for car with id=${carId} deleted successfully.`);
+      } catch (folderError) {
+        console.error(
+          `Failed to delete folder for car with id=${carId}:`,
+          folderError
+        );
+      }
+
       res.status(201).json({
-        message: `car with id=${carId} is deleted`,
+        message: `Car with id=${carId} and associated files have been deleted.`,
       });
     }
   } catch (error) {

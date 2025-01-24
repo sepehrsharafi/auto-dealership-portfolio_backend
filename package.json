@@ -23,6 +23,7 @@
     "neon-js": "^1.1.2",
     "pg": "^8.11.5",
     "pg-format": "^1.0.4",
+    "sharp": "^0.33.5",
     "url": "^0.11.4"
   },
   "devDependencies": {
