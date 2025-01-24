@@ -14,7 +14,7 @@ export async function getCarsByAdminId(adminId) {
 export async function getAllCars() {
   let sqlQuery, sqlVariables;
 
-  sqlQuery = `select car_id , publish_date ,image_urls , brand , model , trim , mileage , year_manufactured , body_condition , short_description , type , payment_type , active from ${NAME}
+  sqlQuery = `select car_id , publish_date ,image_urls , images_sorted , brand , model , trim , mileage , year_manufactured , body_condition , short_description , type , payment_type from ${NAME}
       WHERE active = true
     `;
   sqlVariables = [];
@@ -24,7 +24,7 @@ export async function getAllCars() {
 export async function getAllCarsDashboard() {
   let sqlQuery, sqlVariables;
 
-  sqlQuery = `select car_id , publish_date ,image_urls , brand , model , trim , mileage , year_manufactured , body_condition , short_description , type , payment_type , active from ${NAME}
+  sqlQuery = `select * from ${NAME}
     `;
   sqlVariables = [];
   return (await query(sqlQuery, sqlVariables)).rows;
@@ -33,7 +33,7 @@ export async function getAllCarsDashboard() {
 export async function getSlider() {
   let sqlQuery, sqlVariables;
 
-  sqlQuery = ` SELECT car_id, publish_date, image_urls, brand, model, trim, mileage, payment_type, active
+  sqlQuery = ` SELECT car_id, publish_date, image_urls, images_sorted, brand, model, trim, mileage, payment_type, active
                FROM ${NAME}
                WHERE active = true
                ORDER BY publish_date DESC

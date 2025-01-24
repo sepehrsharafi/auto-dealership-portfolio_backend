@@ -46,5 +46,3 @@ const port = EXPRESS_APP.port;
 app.listen(port, () => {
   console.log(`Dealership app running on port ${port}`);
 });
-
-export default app;
