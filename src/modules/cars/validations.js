@@ -107,7 +107,7 @@ export const updateCarByIdValidator = async (req, res, next) => {
 export const deleteCarByIdValidator = async (req, res, next) => {
   try {
     const paramsSchema = Joi.object({
-      id: Joi.number().integer().positive().required(),
+      car_id: Joi.string().required(), // car ID must be a positive integer
     });
 
     const validatedParams = await paramsSchema.validateAsync(req.params);
