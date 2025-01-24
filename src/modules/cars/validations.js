@@ -29,7 +29,7 @@ export const createCarValidator = async (req, res, next) => {
       active: Joi.boolean().default(true), // Active status (boolean, default true)
       brand: Joi.string().required().trim().max(255), // Brand (required, max length 255)
       model: Joi.string().required().trim().max(255), // Model (required, max length 255)
-      trim: Joi.string().trim().max(255).optional(), // Trim (optional, max length 255)
+      trim: Joi.string().trim().max(255).allow("").optional(),
       mileage: Joi.number().integer().min(0).optional(), // Mileage (optional, non-negative)
       year_manufactured: Joi.number().integer().min(1886).required(), // Year manufactured (required, >= 1886)
       body_condition: Joi.string().trim().max(255).optional(), // Body condition (optional, max length 255)
@@ -71,7 +71,7 @@ export const updateCarByIdValidator = async (req, res, next) => {
       active: Joi.boolean().default(true), // Active status (boolean, default true)
       brand: Joi.string().required().trim().max(255), // Brand (required, max length 255)
       model: Joi.string().required().trim().max(255), // Model (required, max length 255)
-      trim: Joi.string().trim().max(255).optional(), // Trim (optional, max length 255)
+      trim: Joi.string().trim().max(255).allow("").optional(),
       mileage: Joi.number().integer().min(0).optional(), // Mileage (optional, non-negative)
       year_manufactured: Joi.number().integer().min(1886).required(), // Year manufactured (required, >= 1886)
       image_urls: Joi.array().optional(),
