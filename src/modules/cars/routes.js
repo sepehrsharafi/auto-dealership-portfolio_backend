@@ -29,7 +29,7 @@ router.get("/:car_id", getCarByIdValidaitor, getCarByIdController);
 
 router.post("", uploadImages, createCarValidator, createCarController);
 
-router.delete("/:id", deleteCarByIdValidator, deleteCarByIdController);
+router.delete("/:car_id", deleteCarByIdValidator, deleteCarByIdController);
 
 router.put(
   "/:car_id",
