@@ -81,5 +81,40 @@ const deleteFilesInDirectory = async (carID, urls) => {
   );
   return deleteResponse;
 };
+const deleteFolderByCarID = async (carID) => {
+  const bucketName = SDKSECRETS.storageName;
+  const prefix = `uploads/${carID}/`;
 
-export { uploadFileToS3, deleteFilesInDirectory };
+  const listParams = {
+    Bucket: bucketName,
+    Prefix: prefix,
+  };
+
+  const listCommand = new ListObjectsV2Command(listParams);
+  const listResponse = await s3Client.send(listCommand);
+
+  if (!listResponse.Contents || listResponse.Contents.length === 0) {
+    console.log(`No files found in directory: ${prefix}`);
+    return { message: `No files found in directory: ${prefix}` };
+  }
+
+  const objectsToDelete = listResponse.Contents.map((object) => ({
+    Key: object.Key,
+  }));
+
+  const deleteParams = {
+    Bucket: bucketName,
+    Delete: {
+      Objects: objectsToDelete,
+    },
+  };
+
+  const deleteCommand = new DeleteObjectsCommand(deleteParams);
+  const deleteResponse = await s3Client.send(deleteCommand);
+
+  console.log(
+    `Deleted ${deleteResponse.Deleted.length} files from directory: ${prefix}`
+  );
+  return deleteResponse;
+};
+export { uploadFileToS3, deleteFilesInDirectory, deleteFolderByCarID };

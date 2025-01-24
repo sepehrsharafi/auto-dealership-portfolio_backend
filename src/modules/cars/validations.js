@@ -17,6 +17,13 @@ export const getCarByIdValidaitor = async (req, res, next) => {
 
 export const createCarValidator = async (req, res, next) => {
   try {
+    if (req.body.tags && !Array.isArray(req.body.tags)) {
+      req.body.tags = [req.body.tags];
+    }
+    if (req.body.images_sorted && !Array.isArray(req.body.images_sorted)) {
+      req.body.images_sorted = [req.body.images_sorted];
+    }
+
     const bodySchema = Joi.object({
       admin_id: Joi.number().integer().required(), // Foreign key admin ID
       active: Joi.boolean().default(true), // Active status (boolean, default true)
@@ -29,14 +36,14 @@ export const createCarValidator = async (req, res, next) => {
       short_description: Joi.string().trim().optional(), // Short description (optional)
       type: Joi.string().trim().max(255).optional(), // Type (optional, max length 255)
       payment_type: Joi.string().optional(), // Payment type (optional, JSONB)
-      tags: Joi.array().items(Joi.string()).optional(), // Tags (optional, array of strings)
+      tags: Joi.array().items(Joi.string()).min(1).optional(), // Tags (optional, array of strings)
       gearbox: Joi.string().trim().max(255).optional(), // Gearbox (optional, max length 255)
       chassis_condition: Joi.string().trim().max(255).optional(), // Chassis condition (optional, max length 255)
       engine_condition: Joi.string().trim().max(255).optional(), // Engine condition (optional, max length 255)
       exterior_color: Joi.string().trim().max(255).optional(), // Exterior color (optional, max length 255)
       interior_color: Joi.string().trim().max(255).optional(), // Interior color (optional, max length 255)
       full_description: Joi.string().trim().optional(), // Full description (optional)
-      images_sorted: Joi.array().items(Joi.string()).optional(), // Array of image URLs sorted
+      images_sorted: Joi.array().items(Joi.string()).min(1).optional(), // Images sorted (optional, array of strings)
     }).required();
 
     const validationBody = await bodySchema.validateAsync(req.body);
@@ -49,6 +56,12 @@ export const createCarValidator = async (req, res, next) => {
 };
 export const updateCarByIdValidator = async (req, res, next) => {
   try {
+    if (req.body.tags && !Array.isArray(req.body.tags)) {
+      req.body.tags = [req.body.tags];
+    }
+    if (req.body.images_sorted && !Array.isArray(req.body.images_sorted)) {
+      req.body.images_sorted = [req.body.images_sorted];
+    }
     const paramsSchema = Joi.object({
       car_id: Joi.string().required(), // car ID must be a positive integer
     });
@@ -66,14 +79,14 @@ export const updateCarByIdValidator = async (req, res, next) => {
       short_description: Joi.string().trim().optional(), // Short description (optional)
       type: Joi.string().trim().max(255).optional(), // Type (optional, max length 255)
       payment_type: Joi.string().optional(), // Payment type (optional, JSONB)
-      tags: Joi.array().items(Joi.string()).optional(), // Tags (optional, array of strings)
+      tags: Joi.array().items(Joi.string()).min(1).optional(), // Tags (optional, array of strings)
       gearbox: Joi.string().trim().max(255).optional(), // Gearbox (optional, max length 255)
       chassis_condition: Joi.string().trim().max(255).optional(), // Chassis condition (optional, max length 255)
       engine_condition: Joi.string().trim().max(255).optional(), // Engine condition (optional, max length 255)
       exterior_color: Joi.string().trim().max(255).optional(), // Exterior color (optional, max length 255)
       interior_color: Joi.string().trim().max(255).optional(), // Interior color (optional, max length 255)
       full_description: Joi.string().trim().optional(), // Full description (optional)
-      images_sorted: Joi.array().items(Joi.string()).optional(), // Array of image URLs sorted
+      images_sorted: Joi.array().items(Joi.string()).min(1).optional(),
     }).required();
 
     // Validate the params and body
