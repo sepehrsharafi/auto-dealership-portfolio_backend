@@ -224,7 +224,7 @@ export const updateCarByIdController = async (req, res) => {
     );
 
     if (validCompressedFiles.length === 0) {
-      return res.status(400).json({ message: "Failed to compress any images" });
+      return res.status(200).json({ message: "Failed to compress any images" });
     }
 
     const imageUrls = await Promise.all(
