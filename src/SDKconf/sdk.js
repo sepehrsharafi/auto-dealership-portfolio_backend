@@ -17,9 +17,14 @@ const s3Client = new S3Client({
 });
 
 const uploadFileToS3 = async (file, carID) => {
+  // Remove spaces and slashes, and replace with hyphens
+  const formattedFileName = file.originalname
+    .replace(/\s+/g, "-")
+    .replace(/\//g, "-");
+
   const params = {
     Bucket: SDKSECRETS.storageName,
-    Key: `uploads/${carID}/${file.originalname}`,
+    Key: `uploads/${carID}/${formattedFileName}`,
     Body: file.buffer,
     ACL: "public-read",
   };
