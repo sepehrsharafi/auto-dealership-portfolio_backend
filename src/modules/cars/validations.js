@@ -62,6 +62,10 @@ export const updateCarByIdValidator = async (req, res, next) => {
     if (req.body.images_sorted && !Array.isArray(req.body.images_sorted)) {
       req.body.images_sorted = [req.body.images_sorted];
     }
+    if (req.body.image_urls && !Array.isArray(req.body.image_urls)) {
+      req.body.image_urls = [req.body.image_urls];
+    }
+
     const paramsSchema = Joi.object({
       car_id: Joi.string().required(),
     });

@@ -150,7 +150,7 @@ export const createCarController = async (req, res) => {
 
     // Upload compressed files to S3 and get their URLs
     const imageUrls = await Promise.all(
-      validCompressedFiles.map(async (file, index) => {
+      validCompressedFiles.map(async (file) => {
         try {
           const url = await uploadFileToS3(file, carID); // Pass carID to the upload function
           console.log(url);
@@ -196,59 +196,73 @@ export const createCarController = async (req, res) => {
 
 export const updateCarByIdController = async (req, res) => {
   try {
-    const updateList = req.validatedBody;
-    const uploadedFiles = req.files;
-    const carId = req.validatedParams.car_id;
-    const prevImageUrls = updateList.image_urls;
+    console.log(req.validatedBody);
 
-    if (!uploadedFiles || uploadedFiles.length === 0) {
-      console.log("no new images uploaded");
-    }
+    const updateList = req.validatedBody;
+    const uploadedFiles = req.files || [];
+    const carId = req.validatedParams.car_id;
+    const prevImageUrls = updateList.image_urls || [];
+    console.log(
+      ">>> ~ file: controllers.js:203 ~ updateCarByIdController ~ prevImageUrls:",
+      prevImageUrls
+    );
 
     const columns = Object.keys(updateList);
     let allUpdatesSuccessful = true;
 
-    const compressedFiles = await Promise.all(
-      uploadedFiles.map(async (file) => {
-        try {
-          return await compressImage(file);
-        } catch (error) {
-          console.error(`Failed to compress file: ${file.originalname}`, error);
-          return null;
-        }
-      })
-    );
+    let validCompressedFiles = [];
+    if (uploadedFiles.length > 0) {
+      const compressedFiles = await Promise.all(
+        uploadedFiles.map(async (file) => {
+          try {
+            return await compressImage(file);
+          } catch (error) {
+            console.error(
+              `Failed to compress file: ${file.originalname}`,
+              error
+            );
+            return null;
+          }
+        })
+      );
 
-    const validCompressedFiles = compressedFiles.filter(
-      (file) => file !== null
-    );
+      validCompressedFiles = compressedFiles.filter((file) => file !== null);
 
-    if (validCompressedFiles.length === 0) {
-      return res.status(200).json({ message: "Failed to compress any images" });
+      if (validCompressedFiles.length === 0) {
+        return res
+          .status(400)
+          .json({ message: "Failed to compress any images" });
+      }
+    } else {
+      console.log("No new images uploaded");
     }
 
-    const imageUrls = await Promise.all(
-      validCompressedFiles.map(async (file, index) => {
-        try {
-          await deleteFilesInDirectory(carId, prevImageUrls);
-          const url = await uploadFileToS3(file, carId, index);
-          console.log(url);
+    let validImageUrls = [];
+    if (validCompressedFiles.length > 0) {
+      const imageUrls = await Promise.all(
+        validCompressedFiles.map(async (file, index) => {
+          try {
+            await deleteFilesInDirectory(carId, prevImageUrls);
+            const url = await uploadFileToS3(file, carId, index);
+            console.log(url);
+            return url;
+          } catch (error) {
+            console.error(`Failed to upload file: ${file.originalname}`, error);
+            return null;
+          }
+        })
+      );
 
-          return url;
-        } catch (error) {
-          console.error(`Failed to upload file: ${file.originalname}`, error);
-          return null;
-        }
-      })
-    );
+      validImageUrls = imageUrls.filter((url) => url !== null);
 
-    const validImageUrls = imageUrls.filter((url) => url !== null);
-
-    if (validImageUrls.length === 0) {
-      return res.status(400).json({ message: "Failed to upload any images" });
+      if (validImageUrls.length === 0) {
+        return res.status(400).json({ message: "Failed to upload any images" });
+      }
     }
 
-    updateList.image_urls = validImageUrls;
+    if (validImageUrls.length > 0) {
+      updateList.image_urls = updateList.image_urls.concat(validImageUrls);
+    }
 
     for (const column of columns) {
       const updateResult = await updateCarByIdService(
@@ -265,9 +279,9 @@ export const updateCarByIdController = async (req, res) => {
 
     if (allUpdatesSuccessful) {
       res.status(200).json({
-        message: `car with id=${carId} has been updated successfully.`,
+        message: `Car with id=${carId} has been updated successfully.`,
       });
-      console.log(`car with id=${carId} has been updated successfully.`);
+      console.log(`Car with id=${carId} has been updated successfully.`);
     } else {
       res.status(400).json({
         message: `Failed to update car with id=${carId}.`,
@@ -281,7 +295,6 @@ export const updateCarByIdController = async (req, res) => {
     });
   }
 };
-
 export const deleteCarByIdController = async (req, res) => {
   try {
     const carId = req.validatedParams.car_id;
