@@ -196,16 +196,10 @@ export const createCarController = async (req, res) => {
 
 export const updateCarByIdController = async (req, res) => {
   try {
-    console.log(req.validatedBody);
-
     const updateList = req.validatedBody;
     const uploadedFiles = req.files || [];
     const carId = req.validatedParams.car_id;
     const prevImageUrls = updateList.image_urls || [];
-    console.log(
-      ">>> ~ file: controllers.js:203 ~ updateCarByIdController ~ prevImageUrls:",
-      prevImageUrls
-    );
 
     const columns = Object.keys(updateList);
     let allUpdatesSuccessful = true;
