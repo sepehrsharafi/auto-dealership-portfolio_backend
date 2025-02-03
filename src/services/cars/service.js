@@ -7,7 +7,16 @@ import {
   getAllCars,
   getSlider,
   getAllCarsDashboard,
+  getCarsSold,
 } from "../../models/cars/index.js";
+
+export async function getCarsSoldService() {
+  const cars = await getCarsSold();
+  if (cars.length <= 0 || cars === null || cars === undefined) {
+    return null;
+  }
+  return cars;
+}
 
 export async function getCarsByAdminIdService(adminId) {
   const cars = await getCarsByAdminId(adminId);

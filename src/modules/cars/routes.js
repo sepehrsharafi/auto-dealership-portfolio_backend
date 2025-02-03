@@ -15,6 +15,7 @@ import {
   getAllCarsController,
   getSliderController,
   getAllCarsDashboardController,
+  getCarsSoldController,
 } from "./controllers.js";
 import { uploadImages } from "../../multer/multer.js";
 
@@ -26,6 +27,7 @@ router.get("/dashboard", getAllCarsDashboardController);
 router.get("", getAllCarsController);
 router.get("/slider", getSliderController);
 router.get("/:car_id", getCarByIdValidaitor, getCarByIdController);
+router.get("/cars_sold", getCarsSoldController);
 
 router.post("", uploadImages, createCarValidator, createCarController);
 

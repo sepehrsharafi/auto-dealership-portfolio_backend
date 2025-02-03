@@ -3,10 +3,19 @@ import format from "pg-format";
 const SCHEMA = "public";
 const NAME = "car_ads";
 
+export async function getCarsSold() {
+  let sqlQuery;
+
+  sqlQuery = `SELECT cars_sold FROM ${SCHEMA}.admins WHERE admin_id = 1`;
+
+  sqlVariables = [];
+  return (await query(sqlQuery, sqlVariables)).rows;
+}
+
 export async function getCarsByAdminId(adminId) {
   let sqlQuery, sqlVariables;
 
-  sqlQuery = `SELECT * FROM ${SCHEMA}.${NAME} WHERE admin _id = $1`;
+  sqlQuery = `SELECT * FROM ${SCHEMA}.${NAME} WHERE admin_id = $1`;
   sqlVariables = [adminId];
   return (await query(sqlQuery, sqlVariables)).rows;
 }
