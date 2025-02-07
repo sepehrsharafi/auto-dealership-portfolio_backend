@@ -16,18 +16,20 @@ import {
   getSliderController,
   getAllCarsDashboardController,
   getCarsSoldController,
+  updateCarsSoldController,
 } from "./controllers.js";
 import { uploadImages } from "../../multer/multer.js";
 
 const router = express.Router();
 
+router.get("/dashboard", getAllCarsDashboardController);
 router.get("/admin/:id", getCarsByAdminIdController);
 
-router.get("/dashboard", getAllCarsDashboardController);
 router.get("", getAllCarsController);
 router.get("/slider", getSliderController);
-router.get("/:car_id", getCarByIdValidaitor, getCarByIdController);
 router.get("/cars_sold", getCarsSoldController);
+router.put("/cars_sold", updateCarsSoldController);
+router.get("/:car_id", getCarByIdValidaitor, getCarByIdController);
 
 router.post("", uploadImages, createCarValidator, createCarController);
 

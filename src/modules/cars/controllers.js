@@ -8,6 +8,7 @@ import {
   getSliderService,
   getAllCarsDashboardService,
   getCarsSoldService,
+  updateCarsSoldService,
 } from "../../services/cars/service.js";
 import {
   uploadFileToS3,
@@ -34,6 +35,25 @@ export const getCarsSoldController = async (req, res) => {
     });
   }
 };
+
+export const updateCarsSoldController = async (req, res) => {
+  try {
+    const data = await updateCarsSoldService();
+    if (data === null) {
+      res
+        .status(404)
+        .json({ message: "there is no car sold to show or an error happend" });
+    } else {
+      res.status(200).json(data);
+    }
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({
+      message: error.message,
+    });
+  }
+};
+
 export const getCarsByAdminIdController = async (req, res) => {
   try {
     const adminId = req.admin.id;

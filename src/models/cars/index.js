@@ -4,12 +4,21 @@ const SCHEMA = "public";
 const NAME = "car_ads";
 
 export async function getCarsSold() {
-  let sqlQuery;
+  let sqlQuery, sqlVariables;
 
   sqlQuery = `SELECT cars_sold FROM ${SCHEMA}.admins WHERE admin_id = 1`;
 
   sqlVariables = [];
-  return (await query(sqlQuery, sqlVariables)).rows;
+  return (await query(sqlQuery, sqlVariables)).rows[0];
+}
+
+export async function updateCarsSold() {
+  let sqlQuery, sqlVariables;
+
+  sqlQuery = `UPDATE admins SET cars_sold = cars_sold + 1 WHERE admin_id = 1;`;
+
+  sqlVariables = [];
+  return await query(sqlQuery, sqlVariables);
 }
 
 export async function getCarsByAdminId(adminId) {
@@ -33,7 +42,7 @@ export async function getAllCars() {
 export async function getAllCarsDashboard() {
   let sqlQuery, sqlVariables;
 
-  sqlQuery = `select * from ${NAME}
+  sqlQuery = `select * from ${NAME} ORDER BY publish_date DESC
     `;
   sqlVariables = [];
   return (await query(sqlQuery, sqlVariables)).rows;

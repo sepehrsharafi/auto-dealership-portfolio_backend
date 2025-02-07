@@ -8,14 +8,23 @@ import {
   getSlider,
   getAllCarsDashboard,
   getCarsSold,
+  updateCarsSold,
 } from "../../models/cars/index.js";
 
 export async function getCarsSoldService() {
-  const cars = await getCarsSold();
-  if (cars.length <= 0 || cars === null || cars === undefined) {
+  const carsSold = await getCarsSold();
+  if (carsSold.length <= 0 || carsSold === null || carsSold === undefined) {
     return null;
   }
-  return cars;
+  return carsSold;
+}
+
+export async function updateCarsSoldService() {
+  const carsSold = await updateCarsSold();
+  if (carsSold.length <= 0 || carsSold === null || carsSold === undefined) {
+    return null;
+  }
+  return carsSold;
 }
 
 export async function getCarsByAdminIdService(adminId) {
