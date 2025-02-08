@@ -15,7 +15,6 @@ import {
   deleteFilesInDirectory,
   deleteFolderByCarID,
 } from "../../SDKconf/sdk.js";
-import sharp from "sharp";
 import compressImage from "../../core/utils/compressing/compressImage.js";
 
 export const getCarsSoldController = async (req, res) => {
