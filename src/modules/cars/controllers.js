@@ -148,10 +148,6 @@ export const createCarController = async (req, res) => {
     const carDataObj = req.validatedBody;
     const uploadedFiles = req.files;
 
-    if (!uploadedFiles || uploadedFiles.length === 0) {
-      return res.status(400).json({ message: "No images uploaded" });
-    }
-
     // Replace spaces and slashes in brand and model with '0'
     const sanitizeString = (str) => str.replace(/[ /]/g, "0");
 
