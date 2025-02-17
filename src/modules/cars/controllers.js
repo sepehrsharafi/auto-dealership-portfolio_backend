@@ -149,8 +149,7 @@ export const createCarController = async (req, res) => {
     const uploadedFiles = req.files;
 
     // Replace spaces and slashes in brand and model with '0'
-    const sanitizeString = (str) => str.replace(/[ /]/g, "0");
-
+    const sanitizeString = (str) => str.replace(/[^a-zA-Z0-9]/g, "0");
     // car_id
     const brand = sanitizeString(
       carDataObj.brand.toUpperCase().substring(0, 3)
