@@ -15,7 +15,6 @@ import {
   deleteFilesInDirectory,
   deleteFolderByCarID,
 } from "../../SDKconf/sdk.js";
-import compressImage from "../../core/utils/compressing/compressImage.js";
 
 export const getCarsSoldController = async (req, res) => {
   try {
@@ -162,28 +161,9 @@ export const createCarController = async (req, res) => {
     const carID = `${brand}${model}${randomNumber}`;
     carDataObj.car_id = carID;
 
-    const compressedFiles = await Promise.all(
-      uploadedFiles.map(async (file) => {
-        try {
-          return await compressImage(file);
-        } catch (error) {
-          console.error(`Failed to compress file: ${file.originalname}`, error);
-          return null;
-        }
-      })
-    );
-
-    const validCompressedFiles = compressedFiles.filter(
-      (file) => file !== null
-    );
-
-    if (validCompressedFiles.length === 0) {
-      return res.status(400).json({ message: "Failed to compress any images" });
-    }
-
     // Upload compressed files to S3 and get their URLs
     const imageUrls = await Promise.all(
-      validCompressedFiles.map(async (file) => {
+      uploadedFiles.map(async (file) => {
         try {
           const url = await uploadFileToS3(file, carID); // Pass carID to the upload function
           console.log(url);
@@ -237,37 +217,10 @@ export const updateCarByIdController = async (req, res) => {
     const columns = Object.keys(updateList);
     let allUpdatesSuccessful = true;
 
-    let validCompressedFiles = [];
-    if (uploadedFiles.length > 0) {
-      const compressedFiles = await Promise.all(
-        uploadedFiles.map(async (file) => {
-          try {
-            return await compressImage(file);
-          } catch (error) {
-            console.error(
-              `Failed to compress file: ${file.originalname}`,
-              error
-            );
-            return null;
-          }
-        })
-      );
-
-      validCompressedFiles = compressedFiles.filter((file) => file !== null);
-
-      if (validCompressedFiles.length === 0) {
-        return res
-          .status(400)
-          .json({ message: "Failed to compress any images" });
-      }
-    } else {
-      console.log("No new images uploaded");
-    }
-
     let validImageUrls = [];
-    if (validCompressedFiles.length > 0) {
+    if (uploadedFiles.length > 0) {
       const imageUrls = await Promise.all(
-        validCompressedFiles.map(async (file, index) => {
+        uploadedFiles.map(async (file, index) => {
           try {
             await deleteFilesInDirectory(carId, prevImageUrls);
             const url = await uploadFileToS3(file, carId, index);
