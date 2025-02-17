@@ -17,6 +17,8 @@ export const getCarByIdValidaitor = async (req, res, next) => {
 
 export const createCarValidator = async (req, res, next) => {
   try {
+    console.log(req.body);
+
     if (req.body.tags && !Array.isArray(req.body.tags)) {
       req.body.tags = [req.body.tags];
     }
