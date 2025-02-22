@@ -1,5 +1,5 @@
 import pg from "pg";
-import { PG_SECRETS } from "../secrets/index.js";
+import { PG_SECRETS, LOCAL_PG_SECRETS } from "../secrets/index.js";
 
 const pool = new pg.Pool(PG_SECRETS);
 
